@@ -1,8 +1,12 @@
 {
   "name": "payments-extract",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Application payments extract",
   "main": "index.js",
+  "engines" : { 
+    "npm" : ">=10.0.0",
+    "node" : ">=18.0.0"
+  },
   "scripts": {
     "start:front": "npm run --watch --workspace=payments-extract-ui dev",
     "start:back": "npm run --watch --workspace=payments-extract-server dev"

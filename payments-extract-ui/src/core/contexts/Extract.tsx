@@ -14,14 +14,16 @@ type ContextType = {
     summary: Summary | undefined,
     pagination: Pagination | undefined,
     loading: boolean,
-    extract: Extract[]
+    extract: Extract[],
+    fetchExtract: (page: number) => void
 }
 
 const initialState = {
     loading: true,
     summary: undefined,
     pagination: undefined,
-    extract: []
+    extract: [],
+    fetchExtract: () => {}
 };
 
 export const ExtractContext = createContext<ContextType>(initialState);
@@ -36,8 +38,13 @@ export const ExtractProvider = ({ children } : ProviderProps) => {
     const [summary, setSummary] = useState<Summary>();
     const [loading, setLoading] = useState<boolean>(true);
 
-    const fetchExtract = () => {
-        extractClient.get<ApiResponse>('/extract')
+    const fetchExtract = (page: number = 0) => {
+        setLoading(true);
+        const params = {
+            page
+        };
+
+        extractClient.get<ApiResponse>('/extract', {params})
             .then(response => response.data)
             .then(data => {
                 setExtract(data.items);
@@ -52,7 +59,7 @@ export const ExtractProvider = ({ children } : ProviderProps) => {
     }, []);
 
     return (
-        <ExtractContext.Provider value={{loading, extract, pagination, summary}}>
+        <ExtractContext.Provider value={{loading, extract, pagination, summary, fetchExtract}}>
             {children}
         </ExtractContext.Provider>
     )
